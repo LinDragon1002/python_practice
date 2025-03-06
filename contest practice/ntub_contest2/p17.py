@@ -14,6 +14,5 @@ def row():
                 temp2[2] += 1
         if len(temp1) in temp2:
             ans += 1
-        
     return ans
 print(row())
