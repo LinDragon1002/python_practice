@@ -1,10 +1,19 @@
 def counts():
-    st = [i for i in input()]
+    st = input()
+    st1 = ""
+    for i in range(len(st)-1):
+        if st[i] != st[i+1]:
+            st1 += st[i] + ","
+        elif st[i] == st[i+1]:
+            st1 += st[i]
+    st1 += st[-1]
+    st1 = st1.split(",")
     ans = [0,0]
-    for i in range(len(st)):
-        if st[i] == "1" and st[i+1] == "1":
-            ans[1] += 1
-        else:
-            
-        if st[i] == "0" and st[i+1] == "0":
-            ans[0] += 1
+    for i in range(len(st1)):
+        temp = len([i for i in st1[i]])
+        if "0" in st1[i]:
+            ans[0] = max(ans[0],temp)
+        elif "1" in st1[i]:
+            ans[1] = max(ans[1],temp)
+    return abs(ans[0]-ans[1])
+print(counts())
