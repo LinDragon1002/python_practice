@@ -1,18 +1,18 @@
 def x():
-    st = input()
-    temp = st.count("*")
-    temp1 = st.count("/")
-    for i in range(temp):
-        number = st.find("*")
-        if st[number-1] != "X" and st[number+1] != "X":
-            ans = int(st[number-1]) * int(st[number+1])
-            st.removeprefix(f'{st[number-1]}*{st[number+1]}')
-            st.removesuffix
+    st = [i for i in input()]
+    ans = ""
+    for i in range(len(st)):
+        if st[i] != "=":
+            ans += st[i]
         else:
-            ans = st[number-1] + st[number+1]
-    for i in range(temp1):
-        number = st.find("/")
-        if st[number-1] != "X" and st[number+1] != "X":
-            ans = int(st[number-1]) // int(st[number+1])
-        else:
-            ans = st[number-1] + st[number+1]
+            temp = ""
+            for j in range(i+1,len(st)):
+                temp += st[j]
+            break
+
+    for i in range(1,101):
+        if eval(ans,{"X":i}) == eval(temp,{"X":i}):
+            print(i)
+            break
+
+x()
