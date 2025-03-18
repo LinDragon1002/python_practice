@@ -20,5 +20,5 @@ def counts():
             for k in range(st1[1]):
                 ans[i][j] += temp1[i][k] * temp2[k][j]
         
-    return ans
+    return f"{ans}".replace(" ", "")
 print(counts())
