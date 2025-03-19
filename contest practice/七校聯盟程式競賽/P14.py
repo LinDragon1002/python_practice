@@ -1,13 +1,12 @@
+from itertools import permutations
 def counts():
-    ans = []
-    st = [i for i in input()]
-    temp = ""
-    for j in range(len(st)):
-        temp += st[j]
-    ans.append(temp)
-    temp = ""
-    for j in range(len(st)-1,-1,-1):
-        temp += st[j]
-    ans.append(temp)
-    return ans
-print(counts())
+    st = input()
+    temp = []
+    for i in permutations(st):
+        temp.append(int(''.join(i)))
+    temp = list(set(temp))
+    temp.remove(int(st))
+    temp = sorted(temp,reverse=True)
+    for i in temp:
+        print(i) 
+counts()
