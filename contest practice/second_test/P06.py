@@ -3,20 +3,20 @@ temp1 = []
 temp2 = []
 for i in range(len(st)):
     temp1.append(sorted(set(st[i])))
-temp1 = sorted(temp1)
+temp1 = sorted(temp1,reverse=True)
+
 for i in temp1[0]:
     temp = 0
     for j in range(len(st)):
         temp += st[j].count(i)
+    temp /= len(st)
     temp2.append(temp)
-
-ans = {}
-for i in temp2:
-    if i not in ans:
-        ans[i] = 1
+ans = list(set(temp2))
+if len(ans) == 1:
+    temp = ans[0]
+    if type(temp) == float:
+        print(0)
     else:
-        ans[i] += 1
-if len(ans) > 1:
-    print(0)
+        print(1)
 else:
-    print(1)
+    print(0)
