@@ -9,5 +9,5 @@ def permutation(st):
         else:
             ans.append(temp)
     return len(set(ans))
-print(permutation('adaded'))
 print(permutation('114354'))
+print(permutation('adaded'))
