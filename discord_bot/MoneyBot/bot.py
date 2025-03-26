@@ -18,7 +18,7 @@ async def on_ready():
 
 # 📌 自動載入 Cogs
 async def load_cogs():
-    for filename in os.listdir("./textbot/Cogs"):
+    for filename in os.listdir("./Cogs"):
         if filename.endswith(".py") and filename == "SlahCommand.py":
             await bot.load_extension(f"Cogs.{filename[:-3]}")  # 移除 `.py`
 
