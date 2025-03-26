@@ -10,6 +10,7 @@ API_URL = os.getenv("API_URL")
 class DictionaryCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.active_games = {}
 
     # Discord 指令 - 新增單字
     @app_commands.command(name="新增單字", description="新增資料庫的單字")
@@ -84,68 +85,67 @@ class DictionaryCog(commands.Cog):
 
 
     # Discord 指令 - 更新單字
-    # @app_commands.command(name="更新單字", description="修改單字的某個欄位")
-    # @discord.app_commands.choices(
-    #     correct_type=[
-    #         app_commands.Choice(name="詞性", value="abbreviation"),
-    #         app_commands.Choice(name="定義", value="definition"),
-    #         app_commands.Choice(name="例句", value="example"),
-    #         app_commands.Choice(name="翻譯", value="translation")
-    #     ]
-    # )
-    # async def update_word(
-    #     self,
-    #     interaction: discord.Interaction,
-    #     word: str,
-    #     correct_type: app_commands.Choice[str],
-    #     correct_content: str):
-    #     """ 允許修改單字的 某一個欄位 (詞性、定義、例句、翻譯) """
-
-    #     # 更新 SQL
-    #     sql = f"UPDATE eng_dictionary SET {correct_type.value} = %s WHERE word = %s"
-    #     execute_query(sql, (correct_content, word))
-
-    #     await interaction.response.send_message(f"✅ **已更新 `{word}` 的 {correct_type}**：\n🔹 {correct_content}")
+    @app_commands.command(name="更新單字", description="修改單字的某個欄位")
+    @discord.app_commands.choices(
+        correct_type=[
+            app_commands.Choice(name="單字", value="word"),
+            app_commands.Choice(name="詞性", value="abbreviation"),
+            app_commands.Choice(name="定義", value="definition"),
+            app_commands.Choice(name="例句", value="example"),
+            app_commands.Choice(name="翻譯", value="translation")
+        ]
+    )
+    async def update_word(
+        self,
+        interaction: discord.Interaction,
+        word: str,
+        correct_type: app_commands.Choice[str],
+        correct_content: str):
+        """ 允許修改單字的 某一個欄位 (詞性、定義、例句、翻譯) """
+        response = requests.post(f'{API_URL}/update_voc/{word}')
+        if response.status_code == 200:
+            await interaction.response.send_message(f"✅ **已更新 `{word}` 的 {correct_type}**：\n🔹 {correct_content}")
+        else:
+            await interaction.response.send_message(f"❌ 有問題請再試一次！")
 
     # # Discord 指令 - 單字測驗
-    # @app_commands.command(name="單字測驗", description="測驗自己的熟練度")
-    # async def voctest(self, interaction: discord.Interaction):
-    #     sql = "SELECT word, translation FROM eng_dictionary ORDER BY RAND() LIMIT 1"
-    #     results = execute_query(sql, fetchone=True)
-    #     engorchi = random.randint(1,2)
+    @app_commands.command(name="單字測驗", description="測驗自己的熟練度")
+    async def voctest(self, interaction: discord.Interaction):
+        response = requests.get(f"{API_URL}/random_word")
+        data = response.json()
+        engorchi = random.randint(1,2)
 
-    #     if results:
-    #         results = cast(Dict[str, Any], results)
-    #         correct_word = results["word"]
-    #         chinese_word = results["translation"]
+        if data and response.status_code == 200:
+            correct_word = data["word"]
+            chinese_word = data["translation"]
 
-    #         if engorchi == 1:
-    #             self.active_games[interaction.user.id] = correct_word.lower()
-    #             await interaction.response.send_message(f"📝 **請輸入 `{chinese_word}` 的英文單字！**\n（輸入 `/回答 <你的答案>` 來作答）")
-    #         else:
-    #             self.active_games[interaction.user.id] = chinese_word
-    #             await interaction.response.send_message(f"📝 **請輸入 `{correct_word}` 的英文單字！**\n（輸入 `/回答 <你的答案>` 來作答）")
-    #     else:
-    #         await interaction.response.send_message("❌ 資料庫中沒有任何單字！")
+            if engorchi == 1:
+                self.active_games[interaction.user.id] = correct_word.lower()
+                await interaction.response.send_message(f"📝 **請輸入 `{chinese_word}` 的英文單字！**\n（輸入 `/回答 <你的答案>` 來作答）")
+            else:
+                self.active_games[interaction.user.id] = chinese_word
+                await interaction.response.send_message(f"📝 **請輸入 `{correct_word}` 的英文單字！**\n（輸入 `/回答 <你的答案>` 來作答）")
+        else:
+            await interaction.response.send_message("❌ 資料庫中沒有任何單字！")
 
-    # @app_commands.command(name="回答",description="回答測驗問題")
-    # async def ansvoc(self, interaction: discord.Interaction, user_answer: str):
-    #     user_id = interaction.user.id
+    @app_commands.command(name="回答",description="回答測驗問題")
+    async def ansvoc(self, interaction: discord.Interaction, user_answer: str):
+        user_id = interaction.user.id
 
-    #     if user_id not in self.active_games:
-    #         await interaction.response.send_message("❌ 你沒有進行中的測驗，請使用 `/單字測驗` 開始測驗！")
-    #         return
+        if user_id not in self.active_games:
+            await interaction.response.send_message("❌ 你沒有進行中的測驗，請使用 `/單字測驗` 開始測驗！")
+            return
 
-    #     correct_answer = self.active_games[user_id]
+        correct_answer = self.active_games[user_id]
 
-    #     # 📌 判斷是否正確（忽略大小寫）
-    #     if user_answer.lower() == correct_answer:
-    #         await interaction.response.send_message(f"✅ **正確！答案是 `{correct_answer}`！🎉**")
-    #     else:
-    #         await interaction.response.send_message(f"❌ **錯誤！正確答案是 `{correct_answer}`！😢**")
+        # 📌 判斷是否正確（忽略大小寫）
+        if user_answer.lower() == correct_answer:
+            await interaction.response.send_message(f"✅ **正確！答案是 `{correct_answer}`！🎉**")
+        else:
+            await interaction.response.send_message(f"❌ **錯誤！正確答案是 `{correct_answer}`！😢**")
 
-    #     # 📌 刪除使用者的測驗紀錄
-    #     del self.active_games[user_id]
+        # 📌 刪除使用者的測驗紀錄
+        del self.active_games[user_id]
 
 async def setup(bot):
     await bot.add_cog(DictionaryCog(bot))

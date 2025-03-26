@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
+from sqlalchemy.sql.expression import func
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -69,8 +70,43 @@ def delvoc(word):
         db.session.delete(checkvoc)  # 刪除資料
         db.session.commit()  # 提交變更
         return jsonify({"message": f"'{word}' has been deleted."})
-    
+
     return jsonify({"error": "Word not found"}), 404
+
+# API: 更新單字
+@app.route('/update_voc/<word>', methods=['POST'])
+def updatevoc(word):
+    voc = eng_dictionary.query.filter_by(word=word).first()
+    if voc:
+        data = request.json
+        if 'word' in data:
+            eng_dictionary.word = data['word']
+        elif 'translation' in data:
+            eng_dictionary.translation = data['translation']
+            db.session.commit()
+        elif 'abbreviation' in data:
+            eng_dictionary.abbreviation = data['abbreviation']
+        elif 'definition' in data:
+            eng_dictionary.definition = data['definition']
+        elif 'example' in data:
+            eng_dictionary.example = data['example']
+
+    return jsonify()
+
+# API: 單字測驗
+@app.route('/random_word', methods=['GET'])
+def vocexam():
+    voc = eng_dictionary.query.order_by(func.random()).first()
+    if voc:
+        return jsonify({
+            "word":voc.word,
+            "translation":voc.translation,
+            "abbreviation":voc.abbreviation,
+            "definition":voc.definition,
+            "example":voc.example
+        })
+    else:
+        return jsonify({"error": "No words found in the database"}), 404
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
