@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>user_name</p>
+        <input name="user_name" placeholder="請輸入你的名字">
+        <br>
+        <p>user_password</p>
+        <input name="user_password" placeholder="請輸入密碼" type="password">
+        <br>
+        <button>提交</button>
+    </form>
+    <p>已註冊的用戶</p>
+    {% for data in datas %}
+        <div>
+            <p>序號：{{forloop.counter}}</p>
+            <p>名字：{{data.0}}</p>
+            <p>密碼：{{data.1}}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
