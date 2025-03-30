@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
+from sqlalchemy import extract
+import plotly.graph_objects as go
 
 app = Flask(__name__)
 
@@ -19,6 +21,8 @@ db = SQLAlchemy(app)
 class items_types(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     items = db.Column(db.String(100), nullable=False)
+    # 建立關聯，讓 `Item` 可以透過 `category` 取得 `type_name`
+    items_name = db.relationship("money", backref="category")
 
 # 收入/支出 (enorin) 表
 class enorin(db.Model):
@@ -63,6 +67,45 @@ def add_expense():
     db.session.add(new_expense)
     db.session.commit()
     return jsonify({"message": "消費項目已新增", "expense_id": new_expense.id})
+
+# API: 尋找年月份
+@app.route('/find_month/<year>/<month>', methods=['GET'])
+def find_month(year,month):
+    money_list = money.query.filter(
+        extract('year', money.date) == year,  # 篩選年份
+        extract('month', money.date) == month  # 篩選月份
+    ).all()
+
+    if money_list:
+        return jsonify([
+            {
+                "name": i.name,
+                "amount": i.amount,
+                "date": i.date.strftime("%Y-%m-%d"),
+                "type_name": i.category.items
+            } for i in money_list
+        ])
+
+    # 沒有資料則回傳錯誤訊息
+    return jsonify({"error": "No words found for this month"}), 404
+
+# API: 尋找今日金額
+@app.route('/today/<date>', methods=['GET'])
+def today(today):
+    money_list = money.query.filter_by(date=today).all()
+
+    if money_list:
+        return jsonify([
+            {
+                "name": i.name,
+                "amount": i.amount,
+                "date": i.date.strftime("%Y-%m-%d"),
+                "type_name": i.category.items
+            } for i in money_list
+        ])
+
+    # 沒有資料則回傳錯誤訊息
+    return jsonify({"error": "No words found for this month"}), 404
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
