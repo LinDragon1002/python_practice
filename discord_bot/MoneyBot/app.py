@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
 from sqlalchemy import extract
-import plotly.graph_objects as go
 
 app = Flask(__name__)
 
