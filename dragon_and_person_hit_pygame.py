@@ -1,5 +1,6 @@
 import pygame,random
 import pygame.freetype
+import sys
 
 sx,sy,FPS = 800 , 500 , 60                                                   #螢幕長、寬
 role_img = ['images/dragon_girl.png','images/person_boy.png']                #匯入角色圖片
@@ -205,3 +206,4 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
+sys.exit()
