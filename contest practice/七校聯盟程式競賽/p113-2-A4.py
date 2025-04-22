@@ -1,5 +1,5 @@
-people = sorted(input().split(','))
-go_out = input().split(',')
+people = sorted(input().replace(" ","").split(','),key=int)
+go_out = input().replace(" ","").split(',')
 
 ans = [[0,0] for _ in range(len(people))]
 
@@ -9,6 +9,7 @@ for i in range(len(people)):
     for j in go_out:
         if j == people[i]:
             ans[i][0] += 1
+
 if go_out != ['']:
     for i in go_out:
         for j in range(len(people)):
@@ -17,3 +18,7 @@ if go_out != ['']:
 
 for i in range(len(ans)):
     print(f"{people[i]}:({ans[i][0]},{ans[i][1]})")
+
+
+people = sorted(list(map(int,input().split(','))))
+go_out = list(map(int,input().split(',')))
