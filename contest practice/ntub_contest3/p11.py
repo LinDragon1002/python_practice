@@ -7,9 +7,9 @@ if st in ("+", "-", "*", "/"):
         print("error")
     elif st == "/":
         ans = eval(f"{num1}{st}{num2}")
-        print(f'{ans:.2f}')
+        print(f'{num1}{st}{num2}={ans:.2f}')
     else:
         ans = eval(f"{num1}{st}{num2}")
-        print(ans)
+        print(f"{num1}{st}{num2}={ans}")
 else:
     print("error")
