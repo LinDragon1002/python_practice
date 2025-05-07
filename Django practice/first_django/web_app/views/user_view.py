@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from web_app.models import people
+from web_app.models.user_data import people
 
 user_data = []
 # Create your views here.
