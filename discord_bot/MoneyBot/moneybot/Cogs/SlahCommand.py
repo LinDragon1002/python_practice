@@ -20,28 +20,30 @@ class SlahCommand(commands.Cog):
 
     # # discord - 指令 新增類型
     # @app_commands.command(name="add_type", description="新增一個消費類型")
-    # async def add_type(self,interaction: discord.Interaction, items: str):
+    # async def add_type(self,interaction: discord.ZInteraction, items: str):
     #     response = requests.post(f"{API_URL}/add_type", json={"items": items})
     #     if response.status_code == 200:
     #         await interaction.response.send_message(f"類型 `{items}` 已新增！")
     #     else:
     #         await interaction.response.send_message("新增類型時發生錯誤！")
-    @sync_to_async
-    def _create_type(self, name: str):
-        from web_app.models import items_types
-        return items_types.objects.create(items=name)
+    # @sync_to_async
+    # def _create_type(self, name: str):
+    #     from web_app.models import items_types
+    #     return items_types.objects.create(items=name)
     @app_commands.command(name="add_type", description="新增一個消費類型")
     @app_commands.describe(items="類型名稱")
     async def add_type(self, interaction: Interaction, items: str):
         await interaction.response.defer(ephemeral=True)     # 防 3 秒超時
 
-        try:
-            obj = await self._create_type(items)             # 寫 DB
-            msg = f"✅ 類型 **{items}** 已建立 (ID {obj.id})"
-        except Exception as e:
-            msg = f"❌ 新增失敗：{e}"
+        # try:
+        #     obj = await self._create_type(items)             # 寫 DB
+        #     msg = f"✅ 類型 **{items}** 已建立 (ID {obj.id})"
+        # except Exception as e:
+        #     msg = f"❌ 新增失敗：{e}"
+        from services.create_type import create_type_async
+        create_type = await create_type_async(name=items)
 
-        await interaction.edit_original_response(content=msg)
+        await interaction.edit_original_response(content=create_type)
 
     # discord - 指令 新增消費項目
     @app_commands.command(name="新增消費項目", description="新增一筆消費紀錄")
