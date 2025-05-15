@@ -17,13 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from web_app.views.user_view import view_main,register
+from web_app.views.user_view import register
 from web_app.views.announcement_view import *
+from web_app.views.login import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('test/', view_main),
-    path('register/',register),
-    path('announcement/create',announcement_create),
-    path('announcement/update/<int:id>',announcement_update)
+    # path('admin/', admin.site.urls),
+    # path('test/', view_main),
+    # path('register/',register),
+    path('login/',login),
+    path('announcement/',announcement_list,name= 'announcement_list'),
+    path('announcement/create',announcement_create,name='announcement_create'),
+    path('announcement/update/<int:id>',announcement_update,name='announcement_update'),
+    path('announcement/delete/<int:id>',announcement_delete,name='announcement_delete'),
 ]

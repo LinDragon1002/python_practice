@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>新增公告</title>
+    <title>登入</title>
     <style>
         body {
             min-height: 100vh;
@@ -11,15 +11,15 @@
             background-size: 200% 200%;
             animation: bgmove 10s linear infinite alternate;
             font-family: 'Noto Sans TC', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         @keyframes bgmove {
             0% {background-position: 0% 50%;}
             100% {background-position: 100% 50%;}
         }
-        .form-container {
-            max-width: 420px;
-            margin: 48px auto;
-            padding: 38px 28px 32px 28px;
+        .login-card {
             background: rgba(255,255,255,0.96);
             border-radius: 22px;
             box-shadow: 0 8px 36px 4px #6366f140, 0 1.5px 4px #818cf833;
@@ -27,8 +27,11 @@
             overflow: hidden;
             border: 2.5px solid #c7d2fe66;
             backdrop-filter: blur(2.5px);
+            padding: 38px 36px 32px 36px;
+            min-width: 320px;
+            max-width: 95vw;
         }
-        .form-container:before {
+        .login-card:before {
             content: "";
             position: absolute;
             inset: -80px;
@@ -46,62 +49,49 @@
         h2 {
             text-align: center;
             color: #6366f1;
-            margin-bottom: 32px;
             font-size: 2rem;
             letter-spacing: 2px;
             font-weight: 800;
+            margin-bottom: 26px;
             text-shadow: 0 2px 16px #818cf820;
             position: relative;
             z-index: 1;
         }
-        form > div {
-            margin-bottom: 22px;
-            position: relative;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 23px;
             z-index: 1;
+            position: relative;
         }
         label {
-            display: block;
             font-weight: 700;
-            margin-bottom: 9px;
             color: #4b2997;
             letter-spacing: 1px;
-            text-shadow: 0 1px 3px #c7d2fe33;
+            margin-bottom: 8px;
+            display: block;
         }
         input[type="text"],
-        input[type="date"],
-        textarea {
+        input[type="password"] {
             width: 100%;
-            padding: 12px 18px;
-            margin: 0;
-            border: 1.7px solid #a5b4fc;
+            padding: 12px 16px;
             border-radius: 8px;
-            font-size: 1.08rem;
+            font-size: 1.07rem;
+            border: 1.7px solid #a5b4fc;
             background: linear-gradient(100deg,#f8fafc 80%,#f1f5f9 100%);
             color: #312e81;
-            box-sizing: border-box;
-            box-shadow: 0 1.5px 8px #6366f122;
             outline: none;
             transition: border 0.22s, box-shadow 0.20s, background 0.19s;
+            box-sizing: border-box;
+            margin-bottom: 4px;
         }
         input[type="text"]:focus,
-        input[type="date"]:focus,
-        textarea:focus {
+        input[type="password"]:focus {
             border: 1.8px solid #f0abfc;
             background: #fff;
             box-shadow: 0 0 0 3px #f0abfc55;
         }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        .errorlist {
-            color: #dc2626;
-            font-size: 0.97em;
-            margin-bottom: 6px;
-            list-style: none;
-            padding-left: 0;
-        }
-        button[type="submit"] {
+        input[type="submit"] {
             width: 100%;
             padding: 15px 0;
             background: linear-gradient(87deg, #6366f1 10%, #a5b4fc 60%, #f0abfc 95%);
@@ -111,56 +101,65 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
             letter-spacing: 2px;
             box-shadow: 0 3px 16px #a5b4fc40, 0 0.5px 2px #818cf822;
             transition: background 0.19s, box-shadow 0.18s, transform 0.17s;
-            position: relative;
-            z-index: 1;
             filter: drop-shadow(0 0 9px #f0abfc44);
         }
-        button[type="submit"]:hover {
+        input[type="submit"]:hover {
             background: linear-gradient(90deg, #f0abfc 15%, #6366f1 85%);
             box-shadow: 0 6px 30px #f0abfc66, 0 2px 7px #a5b4fc99;
             transform: translateY(-2px) scale(1.022);
             filter: drop-shadow(0 0 16px #f0abfc88);
         }
-        @media (max-width: 540px) {
-            .form-container {
-                padding: 18px 6px;
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 14px 4vw 18px 4vw;
+                min-width: unset;
                 border-radius: 11px;
             }
-            h2 { font-size: 1.35rem; }
+            h2 { font-size: 1.3rem; }
+        }
+        .error-tip {
+            background: #fee2e2;
+            color: #dc2626;
+            font-weight: 700;
+            border-radius: 7px;
+            padding: 12px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px #dc262633;
+            letter-spacing: 1px;
+            animation: shake 0.3s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px);}
+            50% { transform: translateX(6px);}
+            75% { transform: translateX(-4px);}
+            100% { transform: translateX(0);}
         }
     </style>
 </head>
 <body>
-<div class="form-container">
-    <h2>新增公告</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label for="id_title">標題：</label>
-            <input type="text" name="title" id="id_title" value="{{ form.title.value|default_if_none:'' }}">
-            {{ form.title.errors }}
-        </div>
-        <div>
-            <label for="id_content">內容：</label>
-            <textarea name="content" id="id_content">{{ form.content.value|default_if_none:'' }}</textarea>
-            {{ form.content.errors }}
-        </div>
-        <div>
-            <label for="id_start_time">開始日期：</label>
-            <input type="date" name="start_time" id="id_start_time" value="{{ form.start_time.value|default_if_none:'' }}">
-            {{ form.start_time.errors }}
-        </div>
-        <div>
-            <label for="id_end_time">結束日期：</label>
-            <input type="date" name="end_time" id="id_end_time" value="{{ form.end_time.value|default_if_none:'' }}">
-            {{ form.end_time.errors }}
-        </div>
-        <button type="submit">送出</button>
-    </form>
-</div>
+    <div class="login-card">
+        <h2>登入</h2>
+        {% if error %}
+            <div class="error-tip">{{ error }}</div>
+        {% endif %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="username">用戶名稱</label>
+                <input type="text" name="username" id="username" required>
+            </div>
+            <div>
+                <label for="password">用戶密碼</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <input type="submit" value="登入" />
+        </form>
+
+    </div>
 </body>
 </html>
