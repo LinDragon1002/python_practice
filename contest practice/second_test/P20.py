@@ -23,6 +23,9 @@ while True:
                 temp1.append(temp3)
                 temp2.append(b)
     temp1 = list(sorted(temp1,key= lambda x:x[2]))
-    num = temp1[0][2]
-    ans.append(str(num))
+    if len(temp1) > 0:
+        num = temp1[0][2]
+        ans.append(str(num))
+    else:
+        break
 print(",".join(ans))
