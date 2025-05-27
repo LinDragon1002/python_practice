@@ -1,11 +1,63 @@
 #=========================    
 # 類別, 寫下你的程式
 #=========================   
-                  
-                  
-                  
-                  
-                  
+from abc import ABC, abstractmethod
+# 定義一個抽象類別 Employee
+class Employee(ABC):
+    def __init__(self, name, department):
+        self.name = name
+        self.department = department
+    @property
+    def name(self):
+        return self.__name
+    @property
+    def department(self):
+        return self.__department
+    @name.setter
+    def name(self,name):
+        self.__name = name
+    @department.setter
+    def department(self,department):
+        self.__department = department
+    # 抽象方法
+    @abstractmethod
+    def salary(self):
+        return NotImplemented
+
+class DayEmployee(Employee):
+    def __init__(self, name,department):
+        super().__init__(name,department)
+
+    def salary(self,hours):
+        if self.department == "資訊部":
+            return 80000 + 300 * hours
+        elif self.department == "會計部":
+            return 75000 + 300 * hours
+        else:
+            return 70000 + 300 * hours
+class NightEmployee(Employee):
+    def __init__(self, name,department,outside):
+        super().__init__(name,department)
+        self.outside = outside
+    @property
+    def outside(self):
+        return self.__outside
+    @outside.setter
+    def outside(self,outside):
+        self.__outside = outside
+
+    def salary(self,hours):
+        if self.department == "資訊部":
+            if self.outside:
+                return 55000 + 350 * hours + 10000
+            else:
+                return 55000 + 350 * hours
+        else:
+            if self.outside:
+                return 45000 + 350 * hours + 10000
+            else:
+                return 45000 + 350 * hours
+
 #=========================    
 # 主程式, 已完成, 勿改
 #=========================
