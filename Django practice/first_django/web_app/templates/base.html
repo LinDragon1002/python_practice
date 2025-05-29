@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}管理系統{% endblock %}</title>
+
+    <!-- 全站通用樣式：如有需要可改為 static 檔 -->
+    <style>
+      :root {
+        --clr-primary: #4f46e5;   /* indigo‑600 */
+        --clr-primary-dark: #4338ca; /* indigo‑700 */
+        --clr-bg: #f3f4f6;        /* gray‑100 */
+        --clr-nav-bg: #ffffffee;  /* 半透明白 */
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--clr-bg);
+        color: #374151;           /* gray‑700 */
+        line-height: 1.5;
+      }
+      /* ────────────── 導覽列 ────────────── */
+      header {
+        backdrop-filter: blur(8px);
+        background: var(--clr-nav-bg);
+        border-bottom: 1px solid #e5e7eb; /* gray‑200 */
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .navbar {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--clr-primary);
+        text-decoration: none;
+      }
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 1rem;
+      }
+      nav a {
+        display: block;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #374151;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      nav a:hover,
+      nav a:focus {
+        background: var(--clr-primary);
+        color: #ffffff;
+      }
+
+      /* ────────────── 主要內容 ────────────── */
+      main {
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      /* 可選：頁腳 */
+      footer {
+        text-align: center;
+        color: #9ca3af; /* gray‑400 */
+        font-size: 0.9rem;
+        padding: 2rem 0 1.5rem;
+      }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- 導覽列 -->
+    <header>
+      <div class="navbar">
+        <a href="/" class="brand">管理系統</a>
+        <nav>
+          <ul>
+            {% block navbar_menu %}
+            <li><a href="{% url 'logout' %}">登出</a></li>
+            {% endblock %}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      &copy; {{ now|date:'Y' }} 管理系統 — All Rights Reserved
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

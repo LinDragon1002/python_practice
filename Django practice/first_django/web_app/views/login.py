@@ -15,3 +15,7 @@ def login(request):
             auth.login(request, user)
             return redirect('announcement_list')
     return render(request,'login/login.html', {'error': error})
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')
