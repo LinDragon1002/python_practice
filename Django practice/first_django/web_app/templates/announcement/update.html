@@ -6,187 +6,37 @@
 <head>
   <meta charset="UTF-8" />
   <title>編輯公告</title>
-  <link rel="stylesheet" href="{% static 'css/announcement_form.css' %}" />
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #6366f1 0%, #e0e7ff 100%);
-      font-family: 'Segoe UI', 'Noto Sans TC', Arial, sans-serif;
-      animation: gradient-move 10s linear infinite alternate;
-    }
-    @keyframes gradient-move {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
-    .card {
-      background: rgba(255,255,255,0.95);
-      border-radius: 18px;
-      box-shadow: 0 8px 40px 4px rgba(60,80,240,0.10), 0 1.5px 4px rgba(80,80,200,0.13);
-      width: min(100%, 430px);
-      padding: 2.5rem 2.25rem;
-      backdrop-filter: blur(2.5px);
-      position: relative;
-      overflow: hidden;
-      border: 1.5px solid #a5b4fc55;
-    }
-
-    .card:before {
-      content: "";
-      position: absolute;
-      inset: -50px;
-      background: conic-gradient(from 120deg at 60% 40%, #818cf8aa, #f0abfc77, #facc15aa, #818cf8aa 100%);
-      filter: blur(50px);
-      z-index: 0;
-      opacity: 0.19;
-      pointer-events: none;
-      animation: card-glow 8s linear infinite alternate;
-    }
-    @keyframes card-glow {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(8deg);}
-    }
-
-    h2 {
-      margin: 0 0 1.5rem;
-      font-size: 2rem;
-      text-align: center;
-      letter-spacing: 2px;
-      color: #6366f1;
-      font-weight: 800;
-      text-shadow: 0 3px 12px #818cf822;
-      z-index: 1;
-      position: relative;
-    }
-
-    .field {
-      margin-bottom: 1.6rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-      color: #3730a3;
-      letter-spacing: 1px;
-      text-shadow: 0 1px 3px #c7d2fe22;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 0.72rem 1.1rem;
-      font-size: 1.06rem;
-      border: 1.5px solid #a5b4fc;
-      border-radius: 8px;
-      outline: none;
-      background: linear-gradient(100deg,#f8fafc 80%,#f1f5f9 100%);
-      color: #312e81;
-      box-shadow: 0 1.5px 8px #6366f120;
-      transition: border 0.25s, box-shadow 0.2s;
-      box-sizing: border-box;
-    }
-
-    input:focus,
-    textarea:focus {
-      border: 1.5px solid #f0abfc;
-      box-shadow: 0 0 0 3px #c7d2fe77;
-      background: #fff;
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .errorlist {
-      margin-top: 0.38rem;
-      color: #dc2626;
-      font-size: 0.92rem;
-      list-style: none;
-      padding-left: 0;
-      z-index: 1;
-      position: relative;
-    }
-
-    button[type="submit"] {
-      width: 100%;
-      padding: 0.95rem 0;
-      font-size: 1.13rem;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(90deg, #818cf8 0%, #a5b4fc 55%, #f0abfc 100%);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 3px 14px #a5b4fc44, 0 0.5px 2px #818cf822;
-      transition: background 0.2s, box-shadow 0.18s, transform 0.17s;
-      margin-top: 0.5rem;
-      letter-spacing: 1px;
-      position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 0 7px #f0abfc44);
-    }
-    button[type="submit"]:hover {
-      background: linear-gradient(90deg, #f0abfc 0%, #818cf8 80%);
-      box-shadow: 0 5px 22px #f0abfc55, 0 2px 7px #a5b4fc77;
-      transform: translateY(-2px) scale(1.018);
-      filter: drop-shadow(0 0 13px #f0abfc88);
-    }
-
-    @media (max-width: 520px) {
-      .card {
-        padding: 1.3rem 0.5rem;
-        width: 100%;
-        border-radius: 10px;
-      }
-      h2 { font-size: 1.35rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'css/update.css' %}" />
 </head>
 <body>
-  <div class="card">
+  <div class="form-container">
     <h2>編輯公告</h2>
-    <form method="post">
-      {% csrf_token %}
-
-      <div class="field">
-        <label for="id_title">標題</label>
-        <input type="text" name="title" id="id_title" value="{{ form.title.value|default_if_none:'' }}" required />
-        {{ form.title.errors }}
-      </div>
-
-      <div class="field">
-        <label for="id_content">內容</label>
-        <textarea name="content" id="id_content" required>{{ form.content.value|default_if_none:'' }}</textarea>
-        {{ form.content.errors }}
-      </div>
-
-      <div class="field">
-        <label for="id_start_time">開始日期</label>
-        <input type="date" name="start_time" id="id_start_time" value="{{ form.start_time.value|date:'Y-m-d' }}" required />
-        {{ form.start_time.errors }}
-      </div>
-
-      <div class="field">
-        <label for="id_end_time">結束日期</label>
-        <input type="date" name="end_time" id="id_end_time" value="{{ form.end_time.value|date:'Y-m-d' }}" required />
-        {{ form.end_time.errors }}
-      </div>
-
-      <button type="submit">送出</button>
+      <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="id_title">標題：</label>
+            <input type="text" name="title" id="id_title" value="{{ form.title.value|default_if_none:'' }}">
+            {{ form.title.errors }}
+        </div>
+        <div>
+            <label for="id_content">內容：</label>
+            <textarea name="content" id="id_content">{{ form.content.value|default_if_none:'' }}</textarea>
+            {{ form.content.errors }}
+        </div>
+        <div>
+            <label for="id_start_time">開始日期：</label>
+            <input type="date" name="start_time" id="id_start_time" value="{{ form.start_time.value|date:'Y-m-d' }}" required>
+            {{ form.start_time.errors }}
+        </div>
+        <div>
+            <label for="id_end_time">結束日期：</label>
+            <input type="date" name="end_time" id="id_end_time" value="{{ form.end_time.value|date:'Y-m-d' }}" required>
+            {{ form.end_time.errors }}
+        </div>
+        <button type="submit">送出</button>
     </form>
   </div>
+  
 </body>
 {% endblock %}
 </html>
