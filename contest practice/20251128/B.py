@@ -1,13 +1,15 @@
-def dfs_post(T, index):
-    n = len(T)
-    left = index * 2 + 1
-    right = index * 2 + 2
-    if left < n:
-        dfs_post(T, left)
-    if right < n:
-        dfs_post(T, right)
-    if T[index] != "null":
-        print(T[index], end=" ")
-
-T = input().split()
-dfs_post(T, 0)
+def dfs_post(T):
+    stack = []
+    opat = ['+','-','*','/']
+    for i in T:
+        if i in opat:
+            right = stack.pop()
+            left = stack.pop()
+            temp = left + i + right
+            stack.append(str(int(eval(temp))))
+        else:
+            stack.append(i)
+    return stack[0]
+for _ in range(int(input())):
+    T = input().split()
+    print(dfs_post(T))
