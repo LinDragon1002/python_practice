@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>公告列表</title>
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(120deg, #6366f1 0%, #f0abfc 60%, #facc15 100%);
+            background-size: 200% 200%;
+            animation: bgmove 10s linear infinite alternate;
+            font-family: 'Noto Sans TC', 'Segoe UI', Arial, sans-serif;
+        }
+        @keyframes bgmove {
+            0% {background-position: 0% 50%;}
+            100% {background-position: 100% 50%;}
+        }
+        .container {
+            max-width: 660px;
+            margin: 44px auto;
+            padding: 10px;
+        }
+        h1.main-title {
+            text-align: center;
+            color: #6366f1;
+            font-size: 2.15rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 36px;
+            text-shadow: 0 2px 16px #818cf81a;
+        }
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 34px;
+        }
+        .notice-card {
+            position: relative;
+            background: rgba(255,255,255,0.97);
+            border-radius: 18px;
+            box-shadow: 0 8px 36px 4px #6366f120, 0 1.5px 4px #818cf822;
+            padding: 28px 28px 20px 28px;
+            border: 2px solid #c7d2fe44;
+            overflow: hidden;
+            transition: box-shadow 0.35s cubic-bezier(.43,.18,.56,1.24), transform 0.30s cubic-bezier(.43,.18,.56,1.24), border 0.28s;
+            z-index: 0;
+        }
+        .notice-card:before {
+            content: "";
+            position: absolute;
+            inset: -50px;
+            z-index: 0;
+            pointer-events: none;
+            background: conic-gradient(from 120deg at 70% 30%, #818cf866, #f0abfc66, #facc1588, #818cf866 100%);
+            filter: blur(40px);
+            opacity: 0.15;
+            animation: cardglow 7s linear infinite alternate;
+            transition: opacity 0.3s;
+        }
+        @keyframes cardglow {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(10deg);}
+        }
+
+        /* Hover 動畫區域 */
+        .notice-card:hover,
+        .notice-card:focus-within {
+            box-shadow: 0 16px 52px 10px #f0abfc77, 0 8px 24px #6366f177, 0 3px 10px #a5b4fc55;
+            border: 2.5px solid #f0abfcbb;
+            transform: translateY(-8px) scale(1.027) rotate(-0.5deg);
+            z-index: 2;
+        }
+        .notice-card:hover:before,
+        .notice-card:focus-within:before {
+            opacity: 0.33;
+            filter: blur(60px);
+        }
+        /* --------------------------------------------------- */
+
+        .notice-title {
+            font-size: 1.32rem;
+            font-weight: 800;
+            color: #4f46e5;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+            z-index: 1;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .notice-card:hover .notice-title,
+        .notice-card:focus-within .notice-title {
+            color: #d946ef;
+            text-shadow: 0 4px 16px #f0abfc55;
+        }
+        .notice-content {
+            font-size: 1.07rem;
+            color: #42307d;
+            margin-bottom: 18px;
+            z-index: 1;
+            position: relative;
+            word-break: break-word;
+        }
+        .notice-time {
+            font-size: 0.98rem;
+            color: #a1a1aa;
+            text-align: right;
+            letter-spacing: 1px;
+            z-index: 1;
+            position: relative;
+        }
+        @media (max-width: 600px) {
+            .container { max-width: 100%; padding: 6px;}
+            .notice-card { padding: 17px 8px 10px 13px; border-radius: 10px;}
+            h1.main-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="main-title">公告列表</h1>
+        <div class="card-list">
+            {% for data in datas %}
+            <div class="notice-card" tabindex="0">
+                <div class="notice-title">{{ data.title }}</div>
+                <div class="notice-content">{{ data.content }}</div>
+                <div class="notice-time">{{ data.end_time }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

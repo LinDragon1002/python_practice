@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>公告列表</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">公告列表</h1>
+        <a href="{{ url_for('create_page') }}" class="add-btn">＋ 新增公告</a>
+        <div class="card-list">
+            {% for data in datas %}
+            <div class="notice-card" tabindex="{{ data.id }}">
+                <div class="notice-actions">
+                    <a href="{{ url_for('update_page', id=data.id) }}" class="icon-btn edit" title="編輯">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M13.5 3.5L16.5 6.5M15.99 2.99C16.3815 2.5985 17.0185 2.5985 17.41 2.99L17.01 3.39L17.41 2.99C17.8015 3.3815 17.8015 4.0185 17.41 4.41L6 15.82L2.5 17.5L4.18 14L15.99 2.99Z" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="{{ url_for('delete_announcement', id=data.id) }}" class="icon-btn delete" title="刪除" onclick="return confirm('確定要刪除這則公告嗎？');">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M3 6H17M7 6V4.5A1.5 1.5 0 018.5 3h3A1.5 1.5 0 0113 4.5V6m2 0v10a2 2 0 01-2 2H7a2 2 0 01-2-2V6h10z" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="notice-title">{{ data.title }}</div>
+                <div class="notice-content">{{ data.content }}</div>
+                <div class="notice-time">{{ data.end_time }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
