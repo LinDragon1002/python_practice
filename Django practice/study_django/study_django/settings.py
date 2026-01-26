@@ -80,7 +80,11 @@ DATABASES = {
         'USER': 'root',                 # MySQL 使用者名稱
         'PASSWORD': '11346075',         # MySQL 密碼
         'HOST': 'localhost',            # 或你的 MySQL 伺服器位址
-        'PORT': '3306',
+        'PORT': '3309',
+        # 'OPTIONS': {
+        #     'charset': 'utf8mb4',
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        # }
     }
 }
 
