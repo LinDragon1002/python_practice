@@ -2,7 +2,7 @@ s = ["h","e","l","l","o"]
 # ans = s.copy()
 # count = 0
 # for i in range(len(ans)-1,-1,-1):
-#     s[count] = ans[i]
+#     s[count] = ans[i]  
 #     count += 1
 # print(s)
 
