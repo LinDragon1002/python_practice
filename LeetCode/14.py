@@ -8,7 +8,7 @@ for i in range(len(strs[0])):
         break
     for j in strs[1:]:
         if i >= len(j) or j[i] != char:
-            print(strs[0][:i])
+            print(str54.s[0][:i])
 print(strs[0])
 
 # 另解
